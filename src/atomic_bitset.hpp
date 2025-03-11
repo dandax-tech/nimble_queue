@@ -9,12 +9,11 @@ namespace nimble {
 
 template <
     typename atomic_type_t = uint32_t,
-    size_t STRIPE = 16,
     typename Allocator = std::allocator<std::atomic<atomic_type_t>>
     >
 class atomic_bitset
 {
-    using calculator_t = atomic_bitset_calculator<STRIPE, atomic_type_t>;
+    using calculator_t = atomic_bitset_calculator<atomic_type_t>;
     using stripe_t = std::vector<std::atomic<atomic_type_t>, Allocator>;
 
 public:
