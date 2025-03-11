@@ -1,6 +1,3 @@
-#define protected public
-#define private public
-
 #include "atomic_bitset_calculator.hpp"
 #include "tester.hpp"
 

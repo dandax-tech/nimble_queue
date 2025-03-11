@@ -1,3 +1,5 @@
+#pragma once
+
 #include <memory>
 #include <format>
 #include "ios_guard.hpp"

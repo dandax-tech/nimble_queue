@@ -1,3 +1,5 @@
+#pragma once
+
 #include <memory>
 #include <iostream>
 #include <numeric>
@@ -8,12 +10,13 @@
 namespace nimble {
 
 template <
+    size_t STRIPES = 16, // TODO: function of cache size
     typename atomic_type_t = uint32_t,
     typename Allocator = std::allocator<std::atomic<atomic_type_t>>
     >
 class atomic_bitset
 {
-    using calculator_t = atomic_bitset_calculator<atomic_type_t>;
+    using calculator_t = atomic_bitset_calculator<STRIPES, atomic_type_t>;
     using stripe_t = std::vector<std::atomic<atomic_type_t>, Allocator>;
 
 public:
@@ -30,6 +33,7 @@ public:
 private:
 
     calculator_t::bit_index calculate_index(size_t bit_number) const {
+        // TODO: DEBUG only ?
         if (bit_number < 0 || bit_number >= size) throw std::out_of_range("Out of range");
 
         auto ret = calculator_t::calculate_index(bit_number);
@@ -44,27 +48,6 @@ private:
     }
 
 public:
-    class atomic_bitset_accessor {
-        atomic_bitset &bitset;
-        size_t index;
-
-    public:    
-        // TODO: make it take a page/mask instead of index
-        atomic_bitset_accessor(atomic_bitset &bitset_, size_t index_)
-            : bitset(bitset_)
-            , index(index_)
-             {}
-
-        atomic_bitset_accessor operator=(bool value) {
-            bitset.set(index, value);
-            return *this;
-        }
-
-        operator bool() const {
-            return bitset.get(index);
-        }
-    };
-
     public:
 
         bool get(size_t index) const {
@@ -73,27 +56,19 @@ public:
             return (page & pb.mask) != 0;
         }
 
-        void set(size_t index, bool value) {
+        void set(size_t index) {
             auto pb = calculate_index(index);
-            if (value) {
-                stripes[pb.stripe][pb.page] |= pb.mask;
-            } else {
-                stripes[pb.stripe][pb.page] &= ~pb.mask;
-            }          
+            stripes[pb.stripe][pb.page] |= pb.mask;
         }
 
-        atomic_bitset_accessor operator[](size_t index) {
-            return atomic_bitset_accessor(*this, index);
+        void clear(size_t index) {
+            auto pb = calculate_index(index);
+            stripes[pb.stripe][pb.page] &= ~pb.mask;
         }
-
-        bool operator[](size_t index) const {
-            return this->get(index);
-        }
-
 private:
     size_t size;
 
-    std::array<stripe_t, calculator_t::number_of_stripes()> stripes;
+    std::array<stripe_t, STRIPES> stripes;
 };
 
 }
