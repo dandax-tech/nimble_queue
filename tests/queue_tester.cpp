@@ -1,7 +1,7 @@
 #include <iostream>
 #include <new>
 
-#include "queue.hpp"
+#include <nimble/queue.hpp>
 
 
 int main() {

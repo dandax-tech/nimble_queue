@@ -1,5 +1,5 @@
-#include "atomic_bitset_calculator.hpp"
-#include "tester.hpp"
+#include <nimble/atomic_bitset_calculator.hpp>
+#include "common.hpp"
 
 using calculator = nimble::atomic_bitset_calculator<3, uint8_t>;
 

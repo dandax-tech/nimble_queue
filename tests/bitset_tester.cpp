@@ -5,8 +5,8 @@
 
 #define private public
 
-#include "atomic_bitset.hpp"
-#include "tester.hpp"
+#include <nimble/atomic_bitset.hpp>
+#include "common.hpp"
 
 auto get_new_bitset(size_t size)
 {
