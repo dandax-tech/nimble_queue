@@ -10,9 +10,26 @@ target_link_libraries(atomic_bitset_calculator_tester PRIVATE nimble)
 target_link_libraries(queue_tester PRIVATE nimble)
 target_link_libraries(bitset_tester PRIVATE nimble)
 
+enable_testing()
+
+add_test(
+	NAME
+		atomic_bitset_calculator_tester
+	COMMAND
+		$<TARGET_FILE:atomic_bitset_calculator_tester>
+	)
+
 add_test(
 	NAME
 		queue_tester
 	COMMAND
 		$<TARGET_FILE:queue_tester>
 	)
+
+add_test(
+	NAME
+		bitset_tester
+	COMMAND
+		$<TARGET_FILE:bitset_tester>
+	)
+	
