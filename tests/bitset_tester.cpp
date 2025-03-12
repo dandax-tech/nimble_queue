@@ -3,8 +3,6 @@
 #include <unordered_set>
 #include <cmath>
 
-#define private public
-
 #include <nimble/atomic_bitset.hpp>
 #include "common.hpp"
 
@@ -29,5 +27,5 @@ int main() {
 
     TestStatementThrows<std::exception>([&](){ return bitset.get(10000); }, "Out of bounds");
 
-    std::cout << "PASSED: " << passes << " FAILED: " << fails << std::endl;
+    Exit();
 }

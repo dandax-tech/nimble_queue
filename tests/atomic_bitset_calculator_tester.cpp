@@ -24,6 +24,5 @@ int main() {
     TestStatementEquals([](){return calculator::calculate_pages_per_stripe(24);}, 1, "Size 24");
     TestStatementEquals([](){return calculator::calculate_pages_per_stripe(25);}, 2, "Size 25");
 
-    std::cout << "PASSED: " << passes << " FAILED: " << fails << std::endl;
-
+    Exit();
 }

@@ -39,3 +39,10 @@ void TestStatementThrows(Func&& func, std::string_view message) {
         std::cout << "FAILED: " << message << " got unknown exception" << std::endl;
     }
 }
+
+
+void Exit()
+{
+    std::cout << "PASSED: " << passes << " FAILED: " << fails << std::endl;
+    std::exit(fails > 0 ? 1 : 0);
+}

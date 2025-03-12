@@ -1,9 +1,7 @@
 #pragma once
 
-#include <cstddef>
 #include <atomic>
 #include <memory>
-#include <new>
 #include <vector>
 
 #include "atomic_bitset.hpp"
@@ -73,6 +71,8 @@ class queue {
             uint64_t place_at = first_last.advance_last() % cap;
             buffer[place_at] = val;
             buffer_ready.set(place_at);
+
+            return true;
         }
 
         bool try_pop(T& out) {
@@ -80,21 +80,20 @@ class queue {
             uint64_t first, last;
             first_last.grab(first, last);
             if (last == first) return false; // empty
+
             auto cap = capacity();
             auto at = first % cap;
 
             // still writing ?
-            if (!buffer_ready.get(at)) goto again;
+            if (false == buffer_ready.get(at)) goto again;
 
             // did someone else read this
-            if (!first_last.advance_first(first)) goto again;
+            if (false == first_last.advance_first(first)) goto again;
 
             // we got it!
             out = buffer[at];
             buffer_ready.clear(at);
             return true;
-        }
-
-    
+        }   
     };
 }
