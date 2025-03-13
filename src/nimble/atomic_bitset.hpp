@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <iomanip>
 
 #include "atomic_bitset_calculator.hpp"
 
@@ -45,23 +46,32 @@ private:
     }
 
 public:
-    public:
+    bool get(size_t index) const {
+        auto pb = calculate_index(index);
+        const auto& page = stripes[pb.stripe][pb.page];
+        return (page & pb.mask) != 0;
+    }
 
-        bool get(size_t index) const {
-            auto pb = calculate_index(index);
-            const auto& page = stripes[pb.stripe][pb.page];
-            return (page & pb.mask) != 0;
-        }
+    void set(size_t index) {
+        auto pb = calculate_index(index);
+        stripes[pb.stripe][pb.page] |= pb.mask;
+    }
 
-        void set(size_t index) {
-            auto pb = calculate_index(index);
-            stripes[pb.stripe][pb.page] |= pb.mask;
-        }
+    void clear(size_t index) {
+        auto pb = calculate_index(index);
+        stripes[pb.stripe][pb.page] &= ~pb.mask;
+    }
 
-        void clear(size_t index) {
-            auto pb = calculate_index(index);
-            stripes[pb.stripe][pb.page] &= ~pb.mask;
+    void dump(std::ostream &out) const {
+        ios_hexguard _(out);
+        out << std::hex;
+        for (const auto &s : stripes) {
+            for (const auto &r : s) {
+                out <<  std::setfill('0') << std::setw(8) << r << ' ';
+            }
+            out  << std::endl;
         }
+    }
 private:
     size_t size;
 

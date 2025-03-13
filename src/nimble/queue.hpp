@@ -94,6 +94,32 @@ class queue {
             out = buffer[at];
             buffer_ready.clear(at);
             return true;
-        }   
+        }
+
+        void dump(std::ostream &out) const {
+            uint64_t first, last;
+            first_last.grab(first, last);
+
+            uint64_t first_at = first % capacity();
+            uint64_t last_at = last % capacity();
+
+            for (int i = 0; i < buffer.size(); i++) {
+                if (i == last_at)
+                    out << " ] ";
+                if (i == first_at)
+                    out << " [ ";
+                
+                out << i << ' ';
+                if (i % 10 == 9) {
+                    out << std::endl;
+                }
+            }
+
+            out << std::endl;
+
+            buffer_ready.dump(out);
+
+            out << "reads=" << first << " writes=" << last << " q size=" << (last-first) << std::endl;
+        }
     };
 }
