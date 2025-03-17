@@ -3,6 +3,7 @@
 #include <atomic>
 #include <memory>
 #include <vector>
+#include <thread>
 
 #include "atomic_bitset.hpp"
 
@@ -43,6 +44,11 @@ class queue {
     std::vector<T> buffer;
 
     atomic_bitset<> buffer_ready;
+
+#ifdef DEBUG
+    uint64_t again1 = 0;
+    uint64_t again2 = 0;
+#endif
 
     public:
         queue(size_t capacity)
@@ -85,15 +91,38 @@ class queue {
             auto at = first % cap;
 
             // still writing ?
-            if (false == buffer_ready.get(at)) goto again;
+            if (false == buffer_ready.get(at)) {
+#ifdef DEBUG
+                again1++;
+#endif
+                goto again;
+            } 
 
             // did someone else read this
-            if (false == first_last.advance_first(first)) goto again;
+            if (false == first_last.advance_first(first)) {
+#ifdef DEBUG
+                again2++;
+#endif
+                goto again;
+            }
 
             // we got it!
             out = buffer[at];
             buffer_ready.clear(at);
             return true;
+        }
+
+        void dump_stats(std::ostream &out) const {
+            uint64_t first, last;
+            first_last.grab(first, last);
+            out << "reads=" << first
+                << " writes=" << last
+                << " q size=" << (last-first)
+#ifdef DEBUG
+                << " again1=" << again1
+                << " again2=" << again2
+#endif
+                << std::endl;
         }
 
         void dump(std::ostream &out) const {
@@ -116,10 +145,8 @@ class queue {
             }
 
             out << std::endl;
-
             buffer_ready.dump(out);
-
-            out << "reads=" << first << " writes=" << last << " q size=" << (last-first) << std::endl;
+            dump_stats(out);
         }
     };
 }
