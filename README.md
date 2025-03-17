@@ -1,4 +1,4 @@
-# nimble_queue
+# nimble::queue
 
 *Fast lockless queue in C++*
 
