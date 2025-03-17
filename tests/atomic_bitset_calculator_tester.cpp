@@ -1,8 +1,5 @@
-#define protected public
-#define private public
-
-#include "atomic_bitset_calculator.hpp"
-#include "tester.hpp"
+#include <nimble/atomic_bitset_calculator.hpp>
+#include "common.hpp"
 
 using calculator = nimble::atomic_bitset_calculator<3, uint8_t>;
 
@@ -27,6 +24,5 @@ int main() {
     TestStatementEquals([](){return calculator::calculate_pages_per_stripe(24);}, 1, "Size 24");
     TestStatementEquals([](){return calculator::calculate_pages_per_stripe(25);}, 2, "Size 25");
 
-    std::cout << "PASSED: " << passes << " FAILED: " << fails << std::endl;
-
+    Exit();
 }

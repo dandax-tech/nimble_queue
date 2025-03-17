@@ -39,3 +39,25 @@ void TestStatementThrows(Func&& func, std::string_view message) {
         std::cout << "FAILED: " << message << " got unknown exception" << std::endl;
     }
 }
+
+template <typename Func>
+void TestWrap(Func&& func, std::string_view message)
+{
+    std::cout << "Running " << message << "..." << std::endl;
+    try {
+        func();
+        std::cout << "Running " << message << "...OK" << std::endl;
+    } catch (const std::exception& ex) {
+        std::cout << "FAILED: " << message << " exception" << ex.what() << std::endl;
+    } catch (...) {
+        std::cout << "FAILED: " << message << " got unknown exception" << std::endl;
+    }
+}
+
+#define TESTWRAP( name )  TestWrap(name, #name);
+
+void Exit()
+{
+    std::cout << "PASSED: " << passes << " FAILED: " << fails << std::endl;
+    std::exit(fails > 0 ? 1 : 0);
+}

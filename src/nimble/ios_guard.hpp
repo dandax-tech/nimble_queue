@@ -2,6 +2,7 @@
 
 #include <iostream>
 
+namespace nimble {
 
 class ios_hexguard {
 public:
@@ -17,3 +18,5 @@ private:
     std::ostream &out;
     std::ios_base::fmtflags originalFlags;
 };
+
+}
