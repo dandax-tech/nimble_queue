@@ -20,9 +20,9 @@ Example:
 		my_queue.try_pop(data);
 
 NOTE:
-	* The queue does not support sleeping, only polling.
-	* The queue does not resize.
-	* Must run on 64 bit CPU.
+* The queue does not support sleeping, only polling.
+* The queue does not resize.
+* Must run on 64 bit CPU.
 
 This is a very fast implementation of a lockless queue of any copiable type T.
 The implemtation uses atomic integers to keep track of the head and tail pointers.
