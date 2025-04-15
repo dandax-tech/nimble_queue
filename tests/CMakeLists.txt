@@ -1,3 +1,5 @@
+# 
+
 set(CMAKE_BUILD_TYPE Debug)
 add_definitions( -DDEBUG )
 
@@ -5,6 +7,7 @@ add_definitions( -DDEBUG )
 add_executable(atomic_bitset_calculator_tester atomic_bitset_calculator_tester.cpp)
 add_executable(queue_tester_st queue_tester_st.cpp)
 add_executable(queue_tester_mt queue_tester_mt.cpp)
+add_executable(queue_tester_shared_ptr queue_tester_shared_ptr.cpp)
 add_executable(bitset_tester bitset_tester.cpp)
 add_executable(queue_print queue_print.cpp)
 
@@ -12,6 +15,7 @@ add_executable(queue_print queue_print.cpp)
 target_link_libraries(atomic_bitset_calculator_tester PRIVATE nimble)
 target_link_libraries(queue_tester_st PRIVATE nimble)
 target_link_libraries(queue_tester_mt PRIVATE nimble)
+target_link_libraries(queue_tester_shared_ptr PRIVATE nimble)
 target_link_libraries(bitset_tester PRIVATE nimble)
 target_link_libraries(queue_print PRIVATE nimble)
 
@@ -37,6 +41,14 @@ add_test(
 	COMMAND
 		$<TARGET_FILE:queue_tester_mt>
 	)
+
+add_test(
+	NAME
+		queue_tester_shared_ptr
+	COMMAND
+		$<TARGET_FILE:queue_tester_shared_ptr>
+	)
+	
 
 add_test(
 	NAME
